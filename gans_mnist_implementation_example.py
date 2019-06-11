@@ -1,5 +1,17 @@
-#Download the MNIST dataset
+#Import Keras tools we use to implements GANs
+import tensorflow as tf
+from tensorflow import keras
+
+#Import other libraries we are using
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import os
+import h5py
+from tqdm import tqdm
+
 from simple_gans import gans
+
 
 #Import dataset
 from keras.datasets import mnist
