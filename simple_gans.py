@@ -172,6 +172,28 @@ class gans:
         #save the figure
         plt.savefig('generative_adversarial_model epoch: '+str(epoch)+'.png')
 
+    #Function to save the model we train for later use
+    def save_gan_model(self,generator, discriminator,gan):
+        saved_model=generator.save('generator_model.h5')
+        saved_model=discrimantor.save('discrimantor_model.h5')
+        saved_model=gan.save(\
+        'generative_adversarial_model.h5')
+
+
+    #Function to generate final data and store it
+    def generate_save_final_data(self,data_to_generate,input_generator_shape,\
+    generator)
+        #generate noise
+        random_noise=np.random.normal(loc=0, scale=1,\
+        size=[data_to_generate,input_generator_shape])
+        #Generate data.Use the generator we are training to map noise into data
+        generated_data=generator.predict(random_noise)
+
+        #store the generate data array into a h5py formmat
+        with h5py.File('generated_data.h5', 'w') as gan_generation:
+            gan_generation.create_dataset("generated_data",\
+            data=generated_data)
+
     #Put together all the functions we have created to deliver a GANs structure
     #generative adversarial trining network process
     def generative_adversarial_training_process(self,attributes_training,\
@@ -273,22 +295,12 @@ class gans:
         #After the training process, generate data that we want to keep for other
         #purposes such as expanding our dataset or Plotting it later.
         if generate_final_data == True:
-            #generate noise
-            random_noise=np.random.normal(loc=0, scale=1,\
-            size=[data_to_generate,input_generator_shape])
-            #Generate data.Use the generator we are training to map noise into data
-            generated_data=generator_model.predict(random_noise)
-
-            #store the generate data array into a h5py formmat
-            with h5py.File('generated_data.h5', 'w') as gan_generation:
-                gan_generation.create_dataset("generated_data",\
-                data=generated_data)
+            self.generate_save_final_data(data_to_generate,input_generator_shape,\
+            generator_model)
 
         #Save the generator, discriminator, and gan model for later usage.
         #We can store the models to use them later if we want to generate more
         #data without any kind of training
         if save_models == True:
-            saved_model=generator_model.save('generator_model.h5')
-            saved_model=discrimantor_model.save('discrimantor_model.h5')
-            saved_model=generative_adversarial_model.save(\
-            'generative_adversarial_model.h5')
+            self.save_gan_model(generator_model,discrimantor_model,\
+            generative_adversarial_model)
