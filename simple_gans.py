@@ -182,7 +182,7 @@ class gans:
 
     #Function to generate final data and store it
     def generate_save_final_data(self,data_to_generate,input_generator_shape,\
-    generator)
+    generator):
         #generate noise
         random_noise=np.random.normal(loc=0, scale=1,\
         size=[data_to_generate,input_generator_shape])
